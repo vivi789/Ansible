@@ -1,0 +1,19 @@
+---
+- hosts: node1
+  tasks:
+  - name: List patches
+    command: zypper list-patches
+    register: output
+  - debug:
+      var: output.stdout_lines
+  - copy:
+      content: "{{ output.stdout }}"
+      dest: /tmp/list_patches.txt
+  - name: Patching
+    zypper:
+      name: '*'
+      state: latest
+      type: patch
+    register: output_patching
+  - debug:
+      var: output_patching.stdout_lines
