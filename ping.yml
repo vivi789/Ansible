@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: node1
   tasks:
   - name: Ping
     ping:
