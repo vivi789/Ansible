@@ -1,0 +1,27 @@
+---
+  - hosts: localhost
+    vars:
+      cve_name: "CVE-2022-1664"
+    tasks:
+      - name: Searching the CVE
+        shell: zypper lp --cve={{ cve_name }}
+        register: output_info
+      - name: Show output of searching the CVE
+        debug:
+          var: output_info.stdout_lines
+      - name: Pause
+        pause:
+      - name: Run in dry-run mode
+        shell: zypper patch -y --dry-run --cve={{ cve_name }}
+        register: output_dry_run
+      - name: Show packages name
+        debug:
+          var: output_dry_run.stdout_lines
+      - name: Pause
+        pause:
+      - name: Patching
+        shell: zypper patch -y --cve={{ cve_name }}
+        register: output_patching
+      - name: Show output of Patching
+        debug:
+          var: output_patching.stdout_lines
