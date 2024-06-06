@@ -1,0 +1,31 @@
+---
+- name: AppStream
+  hosts: windows
+  gather_facts: false
+  vars:
+    packages:
+      - googlechrome
+      - adobereader
+  tasks:
+    - name: Install Packages
+      win_chocolatey:
+        name: "{{ packages }}"
+        state: latest
+      tags:
+        - install_packages
+
+    - name: Update Windows # Please replace the script path
+      win_shell: C:\Users\ansible\Documents\WindowsPowerShell\test.ps1 > C:\Users\ansible\Documents\WindowsPowerShell\log.txt
+      notify: Reboot server 
+      tags:
+        - update_windows
+
+  handlers:
+    - name: Reboot server
+      win_reboot:
+        msg: "Reboot by Ansible"
+        pre_reboot_delay: 5 # Seconds to wait before reboot
+        post_reboot_delay: 10 # Seconds to wait after the reboot command was successful
+
+      
+    
